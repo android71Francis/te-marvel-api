@@ -1,0 +1,113 @@
+swagger: "2.0"
+info:
+  description: This is a sample server Marvel API server.
+  version: 1.0.0
+  title: Marvel API
+host: "localhost:8080"
+basePath: /api
+tags:
+  - name: characters
+    description: Return collections of characters you found in Marvel
+schemes:
+  - http
+paths:
+  "/characters":
+    get:
+      tags:
+        - characters
+      summary: Return the list of character from Marvel
+      description: Return the list of character from Marvel
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Character"
+        "400":
+          description: Bad Request Error
+          schema:
+                $ref: '#/definitions/BadRequest400'
+        "500": 
+          description: Service not available
+          schema:
+                $ref: '#/definitions/ServiceErr500'
+  "/characters/{id}":
+    get:
+      tags:
+        - characters
+      summary: Return the details of character from Marvel by ID
+      description: Return the details of character from Marvel by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+          description: id of the character to get
+      responses:
+        "200":
+          description: OK
+          schema:
+              $ref: "#/definitions/Character"
+        "400":
+          description: Bad Request Error
+          schema:
+                $ref: '#/definitions/BadRequest400'
+        "404":
+          description: Character not found
+          schema:
+                $ref: '#/definitions/NotFound404'
+        "500": 
+          description: Service not available
+          schema:
+                $ref: '#/definitions/ServiceErr500'
+definitions:
+  Character: 
+    type: object
+    example:
+        id: 1433000
+        name: "Tony Stark"
+        description: "I am IRONMAN !!!!!"
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+  BadRequest400:
+      type: object
+      required:
+        - error_code
+        - message
+      properties:
+        error_code:
+          type: string
+          enum:
+            - BAD_REQUEST
+        message:
+          type: string 
+  ServiceErr500:
+      type: object
+      required:
+        - error_code
+        - message
+      properties:
+        error_code:
+          type: string
+          enum:
+            - SERVICE_ERR
+        message:
+          type: string 
+  NotFound404:
+      type: object
+      required:
+        - error_code
+        - message
+      properties:
+        error_code:
+          type: string
+          enum:
+            - NOT_FOUND
+        message:
+          type: string
